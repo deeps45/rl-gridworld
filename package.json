@@ -1,0 +1,6 @@
+{
+  "name": "rl-gridworld",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test test/*.test.js" }
+}

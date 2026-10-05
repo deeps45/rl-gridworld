@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gridworld RL Lab</title>
+  <meta name="description" content="Interactive gridworld for watching Value Iteration, Policy Iteration, Q-learning and SARSA learn, in the browser.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect width='16' height='16' rx='3' fill='%232a78d6'/><path d='M4 8h6M8 5l3 3-3 3' stroke='white' stroke-width='1.8' fill='none' stroke-linecap='round'/></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <h1>Gridworld RL Lab</h1>
+      <p class="lede">Draw a world, pick an algorithm, and watch it learn. Hover any cell to see its value and the value of each action from it.</p>
+    </div>
+    <a class="gh" href="https://github.com/deeps45/rl-gridworld" target="_blank" rel="noopener">Source on GitHub</a>
+  </header>
+
+  <main class="layout">
+    <section class="board card">
+      <div class="toolbar">
+        <label class="field inline">World
+          <select id="preset"></select>
+        </label>
+        <div class="seg" id="tools" role="radiogroup" aria-label="Edit tool">
+          <button data-tool="inspect" class="on">Inspect</button>
+          <button data-tool="wall">Wall</button>
+          <button data-tool="goal">Goal</button>
+          <button data-tool="pit">Pit</button>
+          <button data-tool="start">Start</button>
+          <button data-tool="empty">Erase</button>
+        </div>
+      </div>
+      <div class="grid-wrap" id="gridWrap">
+        <canvas id="grid" aria-label="Gridworld"></canvas>
+        <div class="tooltip" id="cellTip" hidden></div>
+      </div>
+      <div class="legend-row">
+        <span class="ramp-legend"><span class="ramp"></span><span>negative</span><span class="sep">·</span><span>0</span><span class="sep">·</span><span>positive</span></span>
+        <label class="check"><input type="checkbox" id="showNumbers" checked> Numbers</label>
+        <div class="seg small" id="viewSeg" role="radiogroup" aria-label="View">
+          <button data-view="values" class="on">V(s)</button>
+          <button data-view="q">Q(s,a)</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel card">
+      <div class="seg algo" id="algoSeg" role="radiogroup" aria-label="Algorithm">
+        <button data-algo="vi" class="on">Value Iteration</button>
+        <button data-algo="pi">Policy Iteration</button>
+        <button data-algo="qlearning">Q-learning</button>
+        <button data-algo="sarsa">SARSA</button>
+      </div>
+      <p class="explain" id="explain"></p>
+      <code class="rule" id="rule"></code>
+
+      <div class="actions">
+        <button id="stepBtn" class="btn">Step</button>
+        <button id="runBtn" class="btn primary">Run</button>
+        <button id="watchBtn" class="btn">Watch episode</button>
+        <button id="playBtn" class="btn">Play greedy policy</button>
+        <button id="resetBtn" class="btn ghost">Reset</button>
+      </div>
+      <label class="field">Speed <input type="range" id="speed" min="0" max="4" step="1" value="2"></label>
+
+      <div class="stats" id="stats" aria-live="polite"></div>
+
+      <details class="params" open>
+        <summary>Parameters</summary>
+        <div class="param-grid">
+          <label class="field">γ discount <output id="gammaOut"></output><input type="range" id="gamma" min="0.5" max="1" step="0.01" value="0.9"></label>
+          <label class="field">Slip probability <output id="slipOut"></output><input type="range" id="slip" min="0" max="0.6" step="0.05" value="0"></label>
+          <label class="field td">α learning rate <output id="alphaOut"></output><input type="range" id="alpha" min="0.01" max="1" step="0.01" value="0.5"></label>
+          <label class="field td">ε exploration <output id="epsilonOut"></output><input type="range" id="epsilon" min="0" max="0.5" step="0.01" value="0.1"></label>
+          <label class="field">Step reward <input type="number" id="stepReward" step="0.01"></label>
+          <label class="field">Goal reward <input type="number" id="goalReward" step="1"></label>
+          <label class="field">Pit reward <input type="number" id="pitReward" step="1"></label>
+          <label class="field td">Random seed <input type="number" id="seed" step="1" value="7"></label>
+        </div>
+      </details>
+    </section>
+
+    <section class="chart card">
+      <div class="chart-head">
+        <h2 id="chartTitle">Convergence</h2>
+        <div class="legend" id="chartLegend"></div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="chart"></canvas>
+        <div class="tooltip" id="chartTip" hidden></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    Built with plain JavaScript and canvas. Every algorithm runs in your browser.
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
